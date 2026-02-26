@@ -628,6 +628,9 @@ function render() {
       arrow.textContent = '▲';
     }
   });
+
+  // Tell parent iframe to resize
+  notifyParentHeight();
 }
 
 // Sort click
@@ -660,6 +663,14 @@ clearBtn.addEventListener('click', () => {
   sortAsc = true;
   render();
 });
+
+// Notify parent iframe of height changes
+function notifyParentHeight() {
+  requestAnimationFrame(() => {
+    const height = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'resize', height: height }, '*');
+  });
+}
 
 // Init
 populateOrgFilter();
